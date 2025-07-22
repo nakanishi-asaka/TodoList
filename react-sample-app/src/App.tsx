@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import "./App.css";
+import React, { useState } from "react";
+
 //returnの外にはjs記述できる
 
 //todoの項目をTodo型として定義する
@@ -45,7 +46,7 @@ function App() {
   };
 
   //ステータス変更
-  const handleStatusChange = (id: number, newStatus) => {
+  const handleStatusChange = (id: number, newStatus: Todo["status"]) => {
     const updateTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, status: newStatus } : todo
     );
@@ -69,8 +70,8 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <h1 className="app-title">🌻Todoリスト🌻</h1>
+      <div className="Todo-form">
+        <h1 className="app-title">🌻Todo List🌻</h1>
         <input //todo入力フォーム
           className="todoForm"
           type="text"
@@ -87,65 +88,65 @@ function App() {
         />
 
         <button onClick={handleAddTodo}>追加</button>
-
-        <ul>
-          {todos.map((todo) => (
-            <li className="todoList" key={todo.id}>
-              {isEditingIndex === todo.id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                  <textarea
-                    value={editDescription}
-                    onChange={(e) => setEditDescription(e.target.value)}
-                  />
-                  <button onClick={() => handleEditSave(todo.id)}>
-                    編集を保存
-                  </button>
-                  <button onClick={() => setIsEditingIndex(null)}>
-                    キャンセル
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className="todoTitle">
-                    {todo.id}:{todo.text}
-                  </span>
-                  <p>詳細: {todo.description}</p>
-                  <select
-                    className="statusSelect"
-                    value={todo.status}
-                    onChange={(e) =>
-                      handleStatusChange(todo.id, e.target.value)
-                    }
-                  >
-                    <option value="未着手">未着手</option>
-                    <option value="着手">着手</option>
-                    <option value="完了">完了</option>
-                  </select>
-
-                  <button
-                    onClick={() => {
-                      setIsEditingIndex(todo.id);
-                      setEditText(todo.text);
-                      setEditDescription(todo.description);
-                    }}
-                  >
-                    編集
-                  </button>
-
-                  <button onClick={() => handleDeleteTodo(todo.id)}>
-                    削除
-                  </button>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
       </div>
+      <ul>
+        {todos.map((todo) => (
+          <li className="todoList" key={todo.id}>
+            {isEditingIndex === todo.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                />
+                <button onClick={() => handleEditSave(todo.id)}>
+                  編集を保存
+                </button>
+                <button onClick={() => setIsEditingIndex(null)}>
+                  キャンセル
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="todoTitle">
+                  {todo.id}:{todo.text}
+                </span>
+                <p>詳細: {todo.description}</p>
+                <select
+                  className="statusSelect"
+                  value={todo.status}
+                  onChange={(e) =>
+                    handleStatusChange(
+                      todo.id,
+                      e.target.value as Todo["status"]
+                    )
+                  }
+                >
+                  <option value="未着手">未着手</option>
+                  <option value="着手">着手</option>
+                  <option value="完了">完了</option>
+                </select>
+
+                <button
+                  onClick={() => {
+                    setIsEditingIndex(todo.id);
+                    setEditText(todo.text);
+                    setEditDescription(todo.description);
+                  }}
+                >
+                  編集
+                </button>
+
+                <button onClick={() => handleDeleteTodo(todo.id)}>削除</button>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
